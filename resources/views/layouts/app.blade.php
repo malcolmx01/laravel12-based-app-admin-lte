@@ -20,10 +20,16 @@ report for a list of demo features that were intentionally not carried over.
 		<!--end::Fonts-->
 
 		<!--begin::Metronic + app assets (compiled by Vite)-->
+		{{-- app.css (Tailwind) must load BEFORE the Metronic/Bootstrap bundles: Tailwind's
+		     preflight reset and Bootstrap's reboot both target bare elements (h1, ul, a, ...)
+		     at equal specificity, so load order decides the winner. Metronic pages are written
+		     in Bootstrap classes and need Bootstrap's reboot to win; Tailwind utility classes
+		     (used by a couple of not-yet-restyled Breeze views sharing this layout) are
+		     class-selectors and stay unaffected either way. --}}
 		@vite([
+			'resources/css/app.css',
 			'resources/css/metronic/plugins/plugins.bundle.css',
 			'resources/css/metronic/style.bundle.css',
-			'resources/css/app.css',
 		])
 		<!--end::Metronic + app assets-->
 	</head>
