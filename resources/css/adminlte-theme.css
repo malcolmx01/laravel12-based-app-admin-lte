@@ -1,0 +1,17 @@
+/*
+ * AdminLTE theme stylesheet (vendor only -- no app styles here).
+ *
+ * Versions are pinned to what AdminLTE 4.8.3's own demo pages load from its CDN,
+ * but self-hosted through npm/Vite instead. adminlte.css is copied verbatim from
+ * the AdminLTE package (admin-lte/dist/css/adminlte.css) and already contains
+ * Bootstrap 5.3 -- do not import bootstrap's CSS separately.
+ *
+ * App-specific overrides live in resources/css/app.css, loaded after this file.
+ */
+@import '@fontsource/source-sans-3/300.css';
+@import '@fontsource/source-sans-3/400.css';
+@import '@fontsource/source-sans-3/400-italic.css';
+@import '@fontsource/source-sans-3/700.css';
+@import 'bootstrap-icons/font/bootstrap-icons.min.css';
+@import 'overlayscrollbars/overlayscrollbars.css';
+@import './adminlte/adminlte.css';

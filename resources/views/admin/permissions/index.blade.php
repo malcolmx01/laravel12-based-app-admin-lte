@@ -51,7 +51,7 @@
                                 <td>{{ $permission->name }}</td>
                                 <td>
                                     @forelse ($permission->roles as $role)
-                                        <span class="badge badge-light-primary fs-7 m-1">{{ $role->name }}</span>
+                                        <span class="fs-7 m-1">{{ $role->name }}</span>
                                     @empty
                                         <span class="text-muted fst-italic">Not assigned to any role</span>
                                     @endforelse

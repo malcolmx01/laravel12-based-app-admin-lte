@@ -8,6 +8,9 @@ export default defineConfig({
                 // Laravel / Breeze
                 'resources/css/app.css',
                 'resources/js/app.js',
+                // AdminLTE theme (vendor CSS/JS -- see the headers of these files).
+                'resources/css/adminlte-theme.css',
+                'resources/js/adminlte-theme.js',
                 // Metronic theme (base layout) -- CSS only. The JS bundles are legacy
                 // UMD/global-scope builds (not authored for ESM re-bundling); see
                 // public/assets/js/metronic/README.md for why they're served as

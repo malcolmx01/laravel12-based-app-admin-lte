@@ -1,101 +1,78 @@
 <!DOCTYPE html>
-<!--
-Base layout ported from the Metronic demo (resources/metronic-source/demo1/dist/index.html).
-Structure, class names, and data-kt-* attributes are preserved as-is so Metronic's JS
-(scripts.bundle.js / plugins.bundle.js) continues to work unmodified. See the Phase 2
-report for a list of demo features that were intentionally not carried over.
--->
+{{--
+    Authenticated app shell, based on AdminLTE 4's default layout
+    (admin-lte/dist/starter.html): fixed top navbar + collapsible main sidebar,
+    content header with breadcrumbs, content area, footer.
+
+    Slots used by pages:
+      $header       page title (plain text) -- also used for <title> and the last breadcrumb
+      $breadcrumbs  optional <li class="breadcrumb-item"> items between "Home" and the title
+      $scripts      optional page-specific assets, rendered after the core bundles
+--}}
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="csrf-token" content="{{ csrf_token() }}">
+		<meta name="color-scheme" content="light dark" />
 
-		<title>{{ config('app.name', 'Laravel') }}</title>
+		<title>{{ isset($header) ? trim(strip_tags($header)).' | ' : '' }}{{ config('app.name', 'Laravel') }}</title>
 
-		<link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico') }}" />
+		<link rel="icon" type="image/png" href="{{ asset('assets/adminlte/img/AdminLTELogo.png') }}" />
 
-		<!--begin::Fonts-->
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
-		<!--end::Fonts-->
+		<x-color-mode-init />
 
-		<!--begin::Metronic + app assets (compiled by Vite)-->
-		{{-- app.css (Tailwind) must load BEFORE the Metronic/Bootstrap bundles: Tailwind's
-		     preflight reset and Bootstrap's reboot both target bare elements (h1, ul, a, ...)
-		     at equal specificity, so load order decides the winner. Metronic pages are written
-		     in Bootstrap classes and need Bootstrap's reboot to win; Tailwind utility classes
-		     (used by a couple of not-yet-restyled Breeze views sharing this layout) are
-		     class-selectors and stay unaffected either way. --}}
-		@vite([
-			'resources/css/app.css',
-			'resources/css/metronic/plugins/plugins.bundle.css',
-			'resources/css/metronic/style.bundle.css',
-		])
-		<!--end::Metronic + app assets-->
+		@vite(['resources/css/adminlte-theme.css'])
 	</head>
-	<!--begin::Body-->
-	<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed" style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
-		<!--begin::Root-->
-		<div class="d-flex flex-column flex-root">
-			<!--begin::Page-->
-			<div class="page d-flex flex-row flex-column-fluid">
-				<x-sidebar />
-				<!--begin::Wrapper-->
-				<div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-					<x-topbar />
-					<!--begin::Content-->
-					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-						<!--begin::Toolbar-->
-						<div class="toolbar" id="kt_toolbar">
-							<!--begin::Container-->
-							<div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-								<!--begin::Page title-->
-								<div class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-									@isset($header)
-										{{ $header }}
-									@else
-										<h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{ config('app.name', 'Laravel') }}</h1>
-									@endisset
-								</div>
-								<!--end::Page title-->
+	<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+		<div class="app-wrapper">
+			<x-topbar />
+			<x-sidebar />
+
+			<main class="app-main">
+				<!--begin::App Content Header-->
+				<div class="app-content-header">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-6">
+								<h1 class="mb-0 fs-3">{{ $header ?? config('app.name', 'Laravel') }}</h1>
 							</div>
-							<!--end::Container-->
-						</div>
-						<!--end::Toolbar-->
-						<!--begin::Post-->
-						<div class="post d-flex flex-column-fluid" id="kt_post">
-							<!--begin::Container-->
-							<div id="kt_content_container" class="container-xxl">
-								<x-flash-messages />
-								{{ $slot }}
+							<div class="col-sm-6">
+								<nav aria-label="breadcrumb">
+									<ol class="breadcrumb float-sm-end">
+										<li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+										{{ $breadcrumbs ?? '' }}
+										@isset($header)
+											<li class="breadcrumb-item active" aria-current="page">{{ trim(strip_tags($header)) }}</li>
+										@endisset
+									</ol>
+								</nav>
 							</div>
-							<!--end::Container-->
 						</div>
-						<!--end::Post-->
 					</div>
-					<!--end::Content-->
-					<x-footer />
 				</div>
-				<!--end::Wrapper-->
-			</div>
-			<!--end::Page-->
+				<!--end::App Content Header-->
+				<!--begin::App Content-->
+				<div class="app-content">
+					<div class="container-fluid">
+						<x-flash-messages />
+						{{ $slot }}
+					</div>
+				</div>
+				<!--end::App Content-->
+			</main>
+
+			<x-footer />
 		</div>
-		<!--end::Root-->
 
 		<x-confirm-delete-modal />
 
-		{{-- Metronic's theme scripts are legacy global-scope/UMD bundles, served as
-		     static passthrough assets (not compiled by Vite) -- see
-		     public/assets/js/metronic/README.md for why. --}}
-		<script src="{{ asset('assets/js/metronic/plugins.bundle.js') }}"></script>
-		<script src="{{ asset('assets/js/metronic/scripts.bundle.js') }}"></script>
-		@vite(['resources/js/app.js'])
+		@vite(['resources/js/adminlte-theme.js', 'resources/js/app.js'])
 
-		{{-- Per-page scripts (e.g. DataTables init), rendered after the core bundles
-		     above so page scripts can rely on jQuery/KTUtil/etc. already being global. --}}
+		{{-- Per-page assets (e.g. the users DataTable). Vite entries are ES modules, so
+		     they run in document order after the core bundles above. --}}
 		@isset($scripts)
 			{{ $scripts }}
 		@endisset
 	</body>
-	<!--end::Body-->
 </html>
