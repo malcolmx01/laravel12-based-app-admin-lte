@@ -15,14 +15,22 @@ use Spatie\Permission\Models\Role;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the users with their current role(s).
+     * Display a paginated listing of the users with their current role(s),
+     * optionally filtered by a name/email search.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $users = User::with('roles')->orderBy('name')->get();
-        $roles = Role::orderBy('name')->get();
+        $search = $request->string('search')->trim()->toString();
 
-        return view('admin.users.index', compact('users', 'roles'));
+        $users = User::with('roles')
+            ->when($search !== '', fn ($query) => $query->where(fn ($query) => $query
+                ->where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")))
+            ->orderBy('name')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('admin.users.index', compact('users', 'search'));
     }
 
     /**

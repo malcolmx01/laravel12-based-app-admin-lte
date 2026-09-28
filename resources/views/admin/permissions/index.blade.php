@@ -1,73 +1,89 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Permissions</h1>
+    <x-slot name="header">Permissions</x-slot>
+    <x-slot name="breadcrumbs">
+        <li class="breadcrumb-item">Access Control</li>
     </x-slot>
 
-    <!--begin::Card-->
-    <div class="card card-flush">
-        <!--begin::Card header-->
-        <div class="card-header mt-6">
-            <div class="card-title">
-                <h2>All Permissions</h2>
-            </div>
-            <div class="card-toolbar">
-                <form method="POST" action="{{ route('admin.permissions.store') }}" class="d-flex align-items-start">
-                    @csrf
-                    <div>
-                        <input type="text" name="name" value="{{ old('name') }}" placeholder="e.g. manage invoices"
-                            class="form-control form-control-solid w-250px @error('name') is-invalid @enderror" />
-                        @error('name')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
+    <div class="row g-4 mb-4">
+        <div class="col-lg-4">
+            <form method="POST" action="{{ route('admin.permissions.store') }}" class="card card-outline card-primary">
+                @csrf
+                <div class="card-header">
+                    <h2 class="card-title">Create permission</h2>
+                </div>
+                <div class="card-body">
+                    <x-input-label for="name" value="Permission name" required />
+                    <x-text-input type="text" id="name" name="name" :value="old('name')" required aria-describedby="name-help" />
+                    <x-input-error for="name" :messages="$errors->get('name')" />
+                    <div id="name-help" class="form-text">Lower case, e.g. “manage invoices”. Assign it to roles on the role’s edit page.</div>
+                </div>
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <button type="submit" class="btn btn-primary">Create permission</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">All permissions</h2>
+                    <div class="card-tools">
+                        <form method="GET" action="{{ route('admin.permissions.index') }}" role="search">
+                            <label for="permissions-search" class="visually-hidden">Search permissions</label>
+                            <div class="input-group input-group-sm">
+                                <input type="search" id="permissions-search" name="search" value="{{ $search }}"
+                                    class="form-control" placeholder="Permission name">
+                                <button type="submit" class="btn btn-outline-secondary">
+                                    <i class="bi bi-search" aria-hidden="true"></i><span class="visually-hidden">Search</span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <button type="submit" class="btn btn-light-primary ms-3">
-                        <span class="svg-icon svg-icon-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor" />
-                                <rect x="10.8891" y="17.8033" width="12" height="2" rx="1" transform="rotate(-90 10.8891 17.8033)" fill="currentColor" />
-                                <rect x="6.01041" y="10.9247" width="12" height="2" rx="1" fill="currentColor" />
-                            </svg>
-                        </span>
-                        Add Permission
-                    </button>
-                </form>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Assigned to</th>
+                                    <th scope="col" class="text-end">Roles</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($permissions as $permission)
+                                    <tr>
+                                        <td>{{ $permission->name }}</td>
+                                        <td>
+                                            @forelse ($permission->roles as $role)
+                                                <span class="badge text-primary-emphasis bg-primary-subtle border border-primary-subtle">{{ $role->name }}</span>
+                                            @empty
+                                                <span class="badge text-secondary-emphasis bg-secondary-subtle border border-secondary-subtle">Not assigned</span>
+                                            @endforelse
+                                        </td>
+                                        <td class="text-end"><span class="badge rounded-pill text-bg-secondary">{{ $permission->roles_count }}</span></td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="3" class="text-center text-body-secondary py-4">
+                                            @if ($search !== '')
+                                                No permissions match “{{ $search }}”. <a href="{{ route('admin.permissions.index') }}">Clear search</a>
+                                            @else
+                                                No permissions yet. Create one with the form.
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @if ($permissions->hasPages())
+                    <div class="card-footer">
+                        {{ $permissions->links() }}
+                    </div>
+                @endif
             </div>
         </div>
-        <!--end::Card header-->
-        <!--begin::Card body-->
-        <div class="card-body pt-0">
-            <div class="table-responsive">
-                <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0">
-                    <thead>
-                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                            <th class="min-w-125px">Name</th>
-                            <th class="min-w-250px">Assigned to</th>
-                            <th class="text-end min-w-100px">Roles using it</th>
-                        </tr>
-                    </thead>
-                    <tbody class="fw-bold text-gray-600">
-                        @forelse ($permissions as $permission)
-                            <tr>
-                                <td>{{ $permission->name }}</td>
-                                <td>
-                                    @forelse ($permission->roles as $role)
-                                        <span class="fs-7 m-1">{{ $role->name }}</span>
-                                    @empty
-                                        <span class="text-muted fst-italic">Not assigned to any role</span>
-                                    @endforelse
-                                </td>
-                                <td class="text-end">{{ $permission->roles_count }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="text-center text-muted py-10">No permissions yet.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!--end::Card body-->
     </div>
-    <!--end::Card-->
 </x-app-layout>

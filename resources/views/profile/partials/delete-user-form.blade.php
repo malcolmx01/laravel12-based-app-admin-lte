@@ -1,55 +1,39 @@
-<section class="space-y-6">
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Delete Account') }}
-        </h2>
+<div class="card card-outline card-danger mb-4">
+    <div class="card-header">
+        <h2 class="card-title">Delete account</h2>
+    </div>
+    <div class="card-body">
+        <p class="mb-0">Once your account is deleted, all of its data is permanently deleted. Download anything you want to keep first.</p>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirm-user-deletion">
+            <i class="bi bi-trash" aria-hidden="true"></i> Delete account
+        </button>
+    </div>
+</div>
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
-        </p>
-    </header>
-
-    <x-danger-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-danger-button>
-
-    <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-        <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
+{{-- Dedicated modal (not the shared confirm-delete one) because it needs the password.
+     It reopens itself after a failed password check (resources/js/modules/modal-autoshow.js). --}}
+<div class="modal fade" id="confirm-user-deletion" tabindex="-1" aria-labelledby="confirm-user-deletion-title" aria-hidden="true"
+    @if ($errors->userDeletion->isNotEmpty()) data-show-on-load @endif>
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="POST" action="{{ route('profile.destroy') }}" class="modal-content">
             @csrf
-            @method('delete')
-
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Are you sure you want to delete your account?') }}
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
-            </p>
-
-            <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
-
-                <x-text-input
-                    id="password"
-                    name="password"
-                    type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}"
-                />
-
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+            @method('DELETE')
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="confirm-user-deletion-title">Delete account?</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
-
-                <x-danger-button class="ms-3">
-                    {{ __('Delete Account') }}
-                </x-danger-button>
+            <div class="modal-body">
+                <p>Once your account is deleted, all of its data is permanently deleted. Enter your password to confirm.</p>
+                <x-input-label for="delete_account_password" value="Password" required />
+                <x-text-input type="password" id="delete_account_password" name="password" bag="userDeletion" required autocomplete="current-password" />
+                <x-input-error for="delete_account_password" :messages="$errors->userDeletion->get('password')" />
+            </div>
+            <div class="modal-footer">
+                <x-secondary-button data-bs-dismiss="modal">Cancel</x-secondary-button>
+                <x-danger-button data-submitting-text="Deleting…">Delete account</x-danger-button>
             </div>
         </form>
-    </x-modal>
-</section>
+    </div>
+</div>

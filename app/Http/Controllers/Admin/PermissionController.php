@@ -11,13 +11,20 @@ use Spatie\Permission\Models\Permission;
 class PermissionController extends Controller
 {
     /**
-     * Display a listing of the permissions.
+     * Display a paginated listing of the permissions, optionally filtered by name.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $permissions = Permission::withCount('roles')->orderBy('name')->get();
+        $search = $request->string('search')->trim()->toString();
 
-        return view('admin.permissions.index', compact('permissions'));
+        $permissions = Permission::with('roles')
+            ->withCount('roles')
+            ->when($search !== '', fn ($query) => $query->where('name', 'like', "%{$search}%"))
+            ->orderBy('name')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('admin.permissions.index', compact('permissions', 'search'));
     }
 
     /**

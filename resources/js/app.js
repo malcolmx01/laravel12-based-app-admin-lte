@@ -1,10 +1,7 @@
 import './bootstrap';
 
-import Alpine from 'alpinejs';
-
 // App behaviour (kept separate from the AdminLTE theme runtime in adminlte-theme.js).
 import './modules/confirm-delete';
-
-window.Alpine = Alpine;
-
-Alpine.start();
+import './modules/form-submit-state';
+import './modules/modal-autoshow';
+import './modules/role-permissions';

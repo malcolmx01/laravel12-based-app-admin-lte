@@ -1,67 +1,30 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Add Role</h1>
+    <x-slot name="header">Create role</x-slot>
+    <x-slot name="breadcrumbs">
+        <li class="breadcrumb-item">Access Control</li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.roles.index') }}">Roles</a></li>
     </x-slot>
 
-    <div class="card">
-        <div class="card-body">
-            <form method="POST" action="{{ route('admin.roles.store') }}" class="form">
-                @csrf
-
-                <div class="fv-row mb-10">
-                    <label class="fs-5 fw-bolder form-label mb-2">
-                        <span class="required">Role name</span>
-                    </label>
-                    <input type="text" name="name" value="{{ old('name') }}" placeholder="Enter a role name" autofocus
-                        class="form-control form-control-solid @error('name') is-invalid @enderror" />
-                    @error('name')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="fv-row mb-10">
-                    <label class="fs-5 fw-bolder form-label mb-2">Role Permissions</label>
-                    <div class="table-responsive">
-                        <table class="table align-middle table-row-dashed fs-6 gy-5">
-                            <tbody class="text-gray-600 fw-bold">
-                                <tr>
-                                    <td class="text-gray-800">All Permissions</td>
-                                    <td>
-                                        <label class="form-check form-check-custom form-check-solid me-9">
-                                            <input class="form-check-input" type="checkbox" id="kt_roles_select_all" />
-                                            <span class="form-check-label">Select all</span>
-                                        </label>
-                                    </td>
-                                </tr>
-                                @foreach ($permissions as $permission)
-                                    <tr>
-                                        <td class="text-gray-800">{{ $permission->name }}</td>
-                                        <td>
-                                            <label class="form-check form-check-sm form-check-custom form-check-solid">
-                                                <input class="form-check-input kt-role-permission-checkbox" type="checkbox"
-                                                    name="permissions[]" value="{{ $permission->name }}"
-                                                    {{ in_array($permission->name, old('permissions', [])) ? 'checked' : '' }} />
-                                                <span class="form-check-label">{{ $permission->name }}</span>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="text-end">
-                    <a href="{{ route('admin.roles.index') }}" class="btn btn-light me-3">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Save Role</button>
-                </div>
-            </form>
+    <form method="POST" action="{{ route('admin.roles.store') }}" class="card card-outline card-primary mb-4">
+        @csrf
+        <div class="card-header">
+            <h2 class="card-title">Role details</h2>
         </div>
-    </div>
-
-    <script>
-        document.getElementById('kt_roles_select_all')?.addEventListener('change', function (e) {
-            document.querySelectorAll('.kt-role-permission-checkbox').forEach((cb) => cb.checked = e.target.checked);
-        });
-    </script>
+        <div class="card-body">
+            <p class="small text-body-secondary">Fields marked <span aria-hidden="true">*</span><span class="visually-hidden">with an asterisk</span> are required.</p>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <x-input-label for="name" value="Role name" required />
+                    <x-text-input type="text" id="name" name="name" :value="old('name')" required autofocus />
+                    <x-input-error for="name" :messages="$errors->get('name')" />
+                </div>
+            </div>
+            <hr class="my-4">
+            @include('admin.roles.partials.permissions-fieldset', ['selected' => old('permissions', [])])
+        </div>
+        <div class="card-footer d-flex justify-content-end gap-2">
+            <a href="{{ route('admin.roles.index') }}" class="btn btn-outline-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Create role</button>
+        </div>
+    </form>
 </x-app-layout>

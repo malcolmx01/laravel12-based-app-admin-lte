@@ -1,24 +1,27 @@
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+{{--
+    Page-level feedback after a redirect. Success covers both `session('success')`
+    and the Breeze profile `session('status')` values. Validation errors are NOT
+    summarised here: every field shows its own inline error instead.
+--}}
+@php
+    $statusMessages = [
+        'profile-updated' => __('Profile updated.'),
+        'password-updated' => __('Password updated.'),
+        'verification-link-sent' => __('A new verification link has been sent to your email address.'),
+    ];
+    $success = session('success') ?? ($statusMessages[session('status')] ?? null);
+@endphp
+
+@if ($success)
+    <div class="alert alert-success alert-dismissible fade show mb-4" role="status">
+        <i class="bi bi-check-circle-fill me-2" aria-hidden="true"></i>{{ $success }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
 
 @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ session('error') }}
+    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2" aria-hidden="true"></i>{{ session('error') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
-
-@if ($errors->any())
-    <div class="alert alert-danger" role="alert">
-        <div class="fw-bold mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>{{ __('Please fix the following:') }}</div>
-        <ul class="mb-0">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
     </div>
 @endif

@@ -1,5 +1,7 @@
 {{-- AdminLTE top navbar (app-header). Based on admin-lte/dist/starter.html; the demo's
-     messages/notifications/language dropdowns and search were left out (no backend for them). --}}
+     messages/notifications/language dropdowns and search were left out (no backend for them),
+     and so is its "Home" link (the sidebar's Dashboard item and the Home breadcrumb cover it).
+     Avatars are decorative (alt="") because the user's name is always next to them. --}}
 <nav class="app-header navbar navbar-expand bg-body">
 	<div class="container-fluid">
 		<!--begin::Start Navbar Links-->
@@ -8,9 +10,6 @@
 				<a class="nav-link" data-lte-toggle="sidebar" href="#" role="button" aria-label="Toggle sidebar">
 					<i class="bi bi-list"></i>
 				</a>
-			</li>
-			<li class="nav-item d-none d-md-block">
-				<a href="{{ route('dashboard') }}" class="nav-link">Home</a>
 			</li>
 		</ul>
 		<!--end::Start Navbar Links-->
@@ -55,13 +54,13 @@
 
 			<!--begin::User Menu Dropdown-->
 			<li class="nav-item dropdown user-menu">
-				<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-					<img src="{{ asset('assets/adminlte/img/avatar.png') }}" class="user-image rounded-circle shadow" alt="{{ auth()->user()->name }}" />
+				<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-label="{{ auth()->user()->name }}, account menu">
+					<img src="{{ asset('assets/adminlte/img/avatar.png') }}" class="user-image rounded-circle shadow" alt="" />
 					<span class="d-none d-md-inline">{{ auth()->user()->name }}</span>
 				</a>
 				<ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
 					<li class="user-header text-bg-primary">
-						<img src="{{ asset('assets/adminlte/img/avatar.png') }}" class="rounded-circle shadow" alt="{{ auth()->user()->name }}" />
+						<img src="{{ asset('assets/adminlte/img/avatar.png') }}" class="rounded-circle shadow" alt="" />
 						<p>
 							{{ auth()->user()->name }}
 							<small>{{ auth()->user()->email }}</small>

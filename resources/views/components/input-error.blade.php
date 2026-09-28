@@ -1,9 +1,15 @@
-@props(['messages'])
+{{--
+    Inline field error. Place it right after its control (Bootstrap shows
+    .invalid-feedback for a preceding .is-invalid sibling); outside that
+    position (e.g. under a fieldset) add class="d-block". `for` = the control's
+    id, giving the message id "<for>-error" for aria-describedby.
+--}}
+@props(['messages', 'for' => null])
 
 @if ($messages)
-    <ul {{ $attributes->merge(['class' => 'text-sm text-red-600 space-y-1']) }}>
+    <div @if ($for) id="{{ $for }}-error" @endif {{ $attributes->merge(['class' => 'invalid-feedback']) }}>
         @foreach ((array) $messages as $message)
-            <li>{{ $message }}</li>
+            {{ $message }}@unless ($loop->last)<br>@endunless
         @endforeach
-    </ul>
+    </div>
 @endif

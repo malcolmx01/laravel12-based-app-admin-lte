@@ -4,7 +4,8 @@
 
     <button type="button" class="btn ..." data-bs-toggle="modal" data-bs-target="#kt_modal_confirm_delete"
         data-kt-confirm-action="{{ route('admin.roles.destroy', $role) }}"
-        data-kt-confirm-message='Delete the "{{ $role->name }}" role? This cannot be undone.'>
+        data-kt-confirm-message='Delete the "{{ $role->name }}" role? This cannot be undone.'
+        data-kt-confirm-button="Delete role">
         Delete
     </button>
 
@@ -15,20 +16,18 @@
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="kt_modal_confirm_delete_title">
-					<i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>Please Confirm
-				</h5>
+				<h2 class="modal-title fs-5" id="kt_modal_confirm_delete_title">Confirm deletion</h2>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
 				<p id="kt_modal_confirm_delete_message" class="mb-0">Are you sure you want to delete this? This cannot be undone.</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
 				<form id="kt_modal_confirm_delete_form" method="POST" action="#">
 					@csrf
 					@method('DELETE')
-					<button type="submit" class="btn btn-danger">Yes, delete it</button>
+					<button type="submit" id="kt_modal_confirm_delete_submit" class="btn btn-danger" data-submitting-text="Deleting…">Delete</button>
 				</form>
 			</div>
 		</div>

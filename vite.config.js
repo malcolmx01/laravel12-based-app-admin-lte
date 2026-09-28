@@ -11,14 +11,14 @@ export default defineConfig({
                 // AdminLTE theme (vendor CSS/JS -- see the headers of these files).
                 'resources/css/adminlte-theme.css',
                 'resources/js/adminlte-theme.js',
-                // Metronic theme (base layout) -- CSS only. The JS bundles are legacy
+                // App-level custom-property overrides of the theme (accessibility fixes).
+                'resources/css/theme-overrides.css',
+                // Metronic theme (guest/auth layout only) -- CSS only. The JS bundles are legacy
                 // UMD/global-scope builds (not authored for ESM re-bundling); see
                 // public/assets/js/metronic/README.md for why they're served as
                 // plain static <script> tags instead of Vite entries.
                 'resources/css/metronic/plugins/plugins.bundle.css',
                 'resources/css/metronic/style.bundle.css',
-                // Page-scoped Metronic plugin CSS (only @vite()'d on the pages that need it).
-                'resources/css/metronic/plugins/datatables/datatables.bundle.css',
             ],
             refresh: true,
         }),

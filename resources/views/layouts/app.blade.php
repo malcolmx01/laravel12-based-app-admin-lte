@@ -7,6 +7,7 @@
     Slots used by pages:
       $header       page title (plain text) -- also used for <title> and the last breadcrumb
       $breadcrumbs  optional <li class="breadcrumb-item"> items between "Home" and the title
+      $actions      optional page-level primary action(s), e.g. a "Create user" button
       $scripts      optional page-specific assets, rendered after the core bundles
 --}}
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -22,7 +23,7 @@
 
 		<x-color-mode-init />
 
-		@vite(['resources/css/adminlte-theme.css'])
+		@vite(['resources/css/adminlte-theme.css', 'resources/css/theme-overrides.css'])
 	</head>
 	<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
 		<div class="app-wrapper">
@@ -33,20 +34,27 @@
 				<!--begin::App Content Header-->
 				<div class="app-content-header">
 					<div class="container-fluid">
-						<div class="row">
+						<div class="row g-2 align-items-center">
 							<div class="col-sm-6">
 								<h1 class="mb-0 fs-3">{{ $header ?? config('app.name', 'Laravel') }}</h1>
 							</div>
-							<div class="col-sm-6">
-								<nav aria-label="breadcrumb">
-									<ol class="breadcrumb float-sm-end">
-										<li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-										{{ $breadcrumbs ?? '' }}
-										@isset($header)
-											<li class="breadcrumb-item active" aria-current="page">{{ trim(strip_tags($header)) }}</li>
-										@endisset
+							<div class="col-sm-6 d-flex flex-column align-items-sm-end gap-2">
+								<nav aria-label="Breadcrumb">
+									<ol class="breadcrumb mb-0">
+										@if (request()->routeIs('dashboard'))
+											<li class="breadcrumb-item active" aria-current="page">Home</li>
+										@else
+											<li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+											{{ $breadcrumbs ?? '' }}
+											@isset($header)
+												<li class="breadcrumb-item active" aria-current="page">{{ trim(strip_tags($header)) }}</li>
+											@endisset
+										@endif
 									</ol>
 								</nav>
+								@isset($actions)
+									<div class="d-flex flex-wrap gap-2">{{ $actions }}</div>
+								@endisset
 							</div>
 						</div>
 					</div>
