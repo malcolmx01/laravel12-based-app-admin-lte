@@ -14,6 +14,8 @@ export default defineConfig({
                 // plain static <script> tags instead of Vite entries.
                 'resources/css/metronic/plugins/plugins.bundle.css',
                 'resources/css/metronic/style.bundle.css',
+                // Page-scoped Metronic plugin CSS (only @vite()'d on the pages that need it).
+                'resources/css/metronic/plugins/datatables/datatables.bundle.css',
             ],
             refresh: true,
         }),

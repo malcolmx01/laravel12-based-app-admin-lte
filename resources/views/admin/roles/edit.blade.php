@@ -62,12 +62,12 @@
 
             <div class="d-flex align-items-center justify-content-between">
                 <div class="text-gray-600">Deleting a role is permanent and only allowed while no users hold it.</div>
-                <form method="POST" action="{{ route('admin.roles.destroy', $role) }}"
-                    onsubmit="return confirm('Delete the &quot;{{ $role->name }}&quot; role? This cannot be undone.');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-light-danger">Delete Role</button>
-                </form>
+                <button type="button" class="btn btn-light-danger"
+                    data-bs-toggle="modal" data-bs-target="#kt_modal_confirm_delete"
+                    data-kt-confirm-action="{{ route('admin.roles.destroy', $role) }}"
+                    data-kt-confirm-message='Delete the &quot;{{ $role->name }}&quot; role? This cannot be undone.'>
+                    Delete Role
+                </button>
             </div>
         </div>
     </div>

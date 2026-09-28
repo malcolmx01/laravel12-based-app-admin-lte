@@ -34,12 +34,12 @@
                     <!--begin::Card footer-->
                     <div class="card-footer flex-wrap pt-0">
                         <a href="{{ route('admin.roles.edit', $role) }}" class="btn btn-light btn-active-primary my-1 me-2">Edit Role</a>
-                        <form method="POST" action="{{ route('admin.roles.destroy', $role) }}" class="d-inline"
-                            onsubmit="return confirm('Delete the &quot;{{ $role->name }}&quot; role? This cannot be undone.');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-light btn-active-light-danger my-1">Delete</button>
-                        </form>
+                        <button type="button" class="btn btn-light btn-active-light-danger my-1"
+                            data-bs-toggle="modal" data-bs-target="#kt_modal_confirm_delete"
+                            data-kt-confirm-action="{{ route('admin.roles.destroy', $role) }}"
+                            data-kt-confirm-message='Delete the &quot;{{ $role->name }}&quot; role? This cannot be undone.'>
+                            Delete
+                        </button>
                     </div>
                     <!--end::Card footer-->
                 </div>

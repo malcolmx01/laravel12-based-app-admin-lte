@@ -82,12 +82,20 @@ report for a list of demo features that were intentionally not carried over.
 		</div>
 		<!--end::Root-->
 
+		<x-confirm-delete-modal />
+
 		{{-- Metronic's theme scripts are legacy global-scope/UMD bundles, served as
 		     static passthrough assets (not compiled by Vite) -- see
 		     public/assets/js/metronic/README.md for why. --}}
 		<script src="{{ asset('assets/js/metronic/plugins.bundle.js') }}"></script>
 		<script src="{{ asset('assets/js/metronic/scripts.bundle.js') }}"></script>
 		@vite(['resources/js/app.js'])
+
+		{{-- Per-page scripts (e.g. DataTables init), rendered after the core bundles
+		     above so page scripts can rely on jQuery/KTUtil/etc. already being global. --}}
+		@isset($scripts)
+			{{ $scripts }}
+		@endisset
 	</body>
 	<!--end::Body-->
 </html>

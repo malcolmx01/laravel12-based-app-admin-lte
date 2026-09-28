@@ -1,26 +1,15 @@
-{{-- Metronic footer. Ported from resources/metronic-source/demo1/dist/index.html --}}
-					<div class="footer py-4 d-flex flex-lg-column" id="kt_footer">
-						<!--begin::Container-->
-						<div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
-							<!--begin::Copyright-->
-							<div class="text-dark order-2 order-md-1">
-								<span class="text-muted fw-bold me-1">{{ date('Y') }}©</span>
-								<a href="https://keenthemes.com" target="_blank" class="text-gray-800 text-hover-primary">Keenthemes</a>
-							</div>
-							<!--end::Copyright-->
-							<!--begin::Menu-->
-							<ul class="menu menu-gray-600 menu-hover-primary fw-bold order-1">
-								<li class="menu-item">
-									<a href="https://keenthemes.com" target="_blank" class="menu-link px-2">About</a>
-								</li>
-								<li class="menu-item">
-									<a href="https://keenthemes.com/support" target="_blank" class="menu-link px-2">Support</a>
-								</li>
-								<li class="menu-item">
-									<a href="https://1.envato.market/EA4JP" target="_blank" class="menu-link px-2">Purchase</a>
-								</li>
-							</ul>
-							<!--end::Menu-->
-						</div>
-						<!--end::Container-->
-					</div>
+{{-- Metronic footer. Ported from resources/metronic-source/demo1/dist/index.html.
+     The original Keenthemes/Envato branding and marketing links (About/Support/Purchase)
+     were replaced with a plain app copyright line -- see the Phase 5 report. --}}
+<div class="footer py-4 d-flex flex-lg-column" id="kt_footer">
+	<!--begin::Container-->
+	<div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-center">
+		<!--begin::Copyright-->
+		<div class="text-dark">
+			<span class="text-muted fw-bold me-1">{{ date('Y') }}©</span>
+			<span class="text-gray-800">{{ config('app.name', 'Laravel') }}</span>
+		</div>
+		<!--end::Copyright-->
+	</div>
+	<!--end::Container-->
+</div>

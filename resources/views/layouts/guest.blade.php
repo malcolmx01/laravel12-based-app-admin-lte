@@ -47,13 +47,9 @@ Guest/auth layout ported from Metronic's "basic" auth flow demo
 				<!--end::Content-->
 				<!--begin::Footer-->
 				<div class="d-flex flex-center flex-column-auto p-10">
-					<!--begin::Links-->
-					<div class="d-flex align-items-center fw-bold fs-6">
-						<a href="https://keenthemes.com" target="_blank" class="text-muted text-hover-primary px-2">About</a>
-						<a href="mailto:support@keenthemes.com" class="text-muted text-hover-primary px-2">Contact</a>
-						<a href="https://1.envato.market/EA4JP" target="_blank" class="text-muted text-hover-primary px-2">Contact Us</a>
+					<div class="text-muted fw-bold fs-6">
+						{{ date('Y') }}© {{ config('app.name', 'Laravel') }}
 					</div>
-					<!--end::Links-->
 				</div>
 				<!--end::Footer-->
 			</div>
